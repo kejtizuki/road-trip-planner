@@ -15,7 +15,10 @@
     "tests"
   ],
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "angular": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "angular-ui-router": "ui-router#^0.3.1"
   },
   "devDependencies": {}
 }
