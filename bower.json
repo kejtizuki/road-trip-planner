@@ -1,0 +1,21 @@
+{
+  "name": "www",
+  "description": "Road Trip Planner application",
+  "main": "index.js",
+  "authors": [
+    "Katarzyna Żukowska"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {}
+}
