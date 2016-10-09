@@ -56,7 +56,8 @@ gulp.task('libMinify', function () {
 gulp.task('scripts', function () {
     return gulp.src([
         'app/*.js',
-        'app/modules/**/*.js'
+        'app/modules/**/*.js',
+        'app/components/**/*.js'
     ])
         .pipe(concat('all.js'))
         // .pipe(gulp.dest('dist'))
