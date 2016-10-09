@@ -1,21 +1,40 @@
 <!DOCTYPE html>
-<html ng-app="ngApp">
+<html>
 <head>
+    <!-- <meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
     <title>Road Trip Planner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta charset="utf-8">
-    <link href="dist/css/styles.css" rel="stylesheet"/>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-
+    <link href="dist/css/styles.css" rel="stylesheet"/>
 
 </head>
 
-<body>
-<div ui-view>
-  <h1>blabla</h1>
+<body ng-app="ngApp">
+<!-- <div ui-view></div> -->
+
+<nav class="navbar" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" ui-sref="#">Logo or sth</a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li><a ui-sref="start">Start a new trip</a></li>
+        <li><a ui-sref="about">About</a></li>
+        <li class="sideMenu"><a ui-sref="login">Log In</a></li>
+        <li class="sideMenu"><a ui-sref="register">Register</a></li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div ui-view></div>
 
 </div>
+
+
+
 <script type="text/javascript" src="dist/js/dependency.min.js"></script>
+<!-- <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHt9KSm9TfHsag27QVfo8UBc5nTEIgPO0" async defer></script>
 <script type="text/javascript" src="dist/js/all.js"></script>
 </body>
 </html>

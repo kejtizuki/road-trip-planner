@@ -39,7 +39,11 @@ gulp.task('libMinify', function () {
         'bower_components/jquery/dist/jquery.js',
         'bower_components/angular/angular.js',
         'bower_components/bootstrap/dist/js/bootstrap.min.js',
-        'bower_components/angular-ui-router/release/angular-ui-router.min.js'
+        'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+        'bower_components/angular-route/angular-route.min.js',
+        'bower_components/lodash/dist/lodash.min.js',
+        'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
+        'bower_components/angular-google-maps/dist/angular-google-maps.min.js'
     ])
         .pipe(concat('dependency.js'))
         .pipe(rename('dependency.min.js'))
@@ -55,9 +59,9 @@ gulp.task('scripts', function () {
         'app/modules/**/*.js'
     ])
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist'))
-        .pipe(rename('all.min.js'))
-        .pipe(uglify())
+        // .pipe(gulp.dest('dist'))
+        // .pipe(rename('all.min.js'))
+        // .pipe(uglify())
         .pipe(gulp.dest(bases.dist + 'js'));
 });
 
@@ -83,4 +87,4 @@ gulp.task('images', function () {
 
 
 gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
-gulp.task('run', ['lint', 'sass', 'scripts', 'libMinify', 'server', 'watch', 'images']);
+gulp.task('run', ['lint', 'sass', 'scripts', 'server', 'libMinify', 'watch', 'images']);
