@@ -43,7 +43,8 @@ gulp.task('libMinify', function () {
         'bower_components/angular-route/angular-route.min.js',
         'bower_components/lodash/dist/lodash.min.js',
         'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
-        'bower_components/angular-google-maps/dist/angular-google-maps.min.js'
+        'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+        'bower_components/angular-google-places-autocomplete/src/autocomplete.js'
     ])
         .pipe(concat('dependency.js'))
         .pipe(rename('dependency.min.js'))
