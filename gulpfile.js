@@ -43,7 +43,6 @@ gulp.task('libMinify', function () {
         'bower_components/angular-route/angular-route.min.js',
         'bower_components/lodash/dist/lodash.min.js',
         'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
-        'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
         'bower_components/angular-google-places-autocomplete/src/autocomplete.js'
     ])
         .pipe(concat('dependency.js'))
@@ -58,6 +57,8 @@ gulp.task('scripts', function () {
     return gulp.src([
         'app/*.js',
         'app/modules/**/*.js',
+        'app/modules/*.js',
+        'app/components/*.js',
         'app/components/**/*.js'
     ])
         .pipe(concat('all.js'))

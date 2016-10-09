@@ -1,0 +1,3 @@
+map.service('MapService', function() {
+  
+})
