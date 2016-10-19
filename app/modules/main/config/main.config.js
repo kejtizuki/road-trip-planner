@@ -33,11 +33,20 @@ main.config(function ($urlRouterProvider, $stateProvider) {
     url: '/start',
     templateUrl: 'app/modules/map/views/map.view.html',
     controller: 'MapController'
-
   })
   .state('about', {
     url: '/about',
     templateUrl: 'app/modules/main/views/about.html'
+  })
+  .state('login', {
+    url: '/login',
+    templateUrl: 'app/modules/authentication/views/login.view.html',
+    controller: 'AuthenticationController'
+  })
+  .state('register', {
+    url: '/register',
+    templateUrl: 'app/modules/authentication/views/register.view.html',
+    controller: 'AuthenticationController'
   });
 
 
