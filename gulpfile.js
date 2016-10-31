@@ -45,7 +45,9 @@ gulp.task('libMinify', function () {
         'bower_components/google-maps/lib/Google.min.js',
         'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
         'bower_components/angular-google-places-autocomplete/src/autocomplete.js',
-        'bower_components/angular-google-maps/dist/angular-google-maps.min.js'
+        'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+        'bower_components/leaflet/dist/leaflet.js',
+        'bower_components/leaflet-routeboxer/src/leaflet-routeboxer.js'
     ])
         .pipe(concat('dependency.js'))
         .pipe(rename('dependency.min.js'))
