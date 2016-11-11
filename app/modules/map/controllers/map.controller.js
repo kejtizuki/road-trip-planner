@@ -300,15 +300,15 @@ $scope.options = {
   directionsDisplay = new google.maps.DirectionsRenderer({
     polylineOptions: {
       strokeColor: "#efefef"
-    }
-    // suppressMarkers: true
+    },
+    suppressMarkers: true
   });
 
  //  icons for A and B markers
  //  var icons = {
  //  start: new Marker({
  //    map: mapControl,
- //    position: place.geometry.location,
+ //    // position: ,
  //    icon: {
  //      path: MAP_PIN,
  //      fillColor: '#ff6c32',
@@ -320,7 +320,7 @@ $scope.options = {
  //  }),
  //  end: new Marker({
  //    map: mapControl,
- //    position: place.geometry.location,
+ //    // position: place.geometry.location,
  //    icon: {
  //      path: MAP_PIN,
  //      fillColor: '#70ef4c',
@@ -331,6 +331,24 @@ $scope.options = {
  //    }
  //  })
  // };
+
+ var iconStart = {
+   path: MAP_PIN,
+   fillColor: '#70ef4c',
+   fillOpacity: 1,
+   strokeColor: '',
+   strokeWeight: 0,
+   scale: 1
+ }
+
+ var iconEnd = {
+   path: MAP_PIN,
+   fillColor: 'red',
+   fillOpacity: 1,
+   strokeColor: '',
+   strokeWeight: 0,
+   scale: 1
+ }
 
   // directions object -- with defaults
   // $scope.directions = {
@@ -343,23 +361,36 @@ $scope.options = {
     var request = {
       origin: $scope.directions.origin.formatted_address,
       destination: $scope.directions.destination.formatted_address,
-      travelMode: google.maps.DirectionsTravelMode.DRIVING
+      travelMode: google.maps.DirectionsTravelMode.WALKING
     };
 
     var reqFormatted = {
-      origin: $scope.directions.origin.id,
-      destination: $scope.directions.destination.id
+      origin: $scope.directions.origin,
+      destination: $scope.directions.destination
     };
 
+    function makeMarker(position, icon, title) {
+      new Marker({
+        position: position,
+        map: mapControl,
+        icon: icon,
+        map_icon_label: '<span class="map-icon map-icon-circle"></span>',
+        title: title
+      });
+    }
+
     directionsService.route(request, function (response, status) {
-
+      console.log("response");
       console.log(response);
-
-      // uiGmapIsReady.promise().then((function (maps) {
-      //       $timeout($scope.setMap,"2000")}));
 
       if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
+
+        console.log("res loc");
+        console.log(response.routes[0].legs[0].start_location);
+
+        makeMarker( response.routes[0].legs[0].start_location, iconStart, "title" );
+        makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'title' );
 
         var path = response.routes[0].overview_path;
         bounds = routeboxer.box(path, distance);
@@ -406,8 +437,7 @@ $scope.options = {
       strokeColor: '',
       strokeWeight: 1,
       scale: 0.5
-    },
-    // map_icon_label: '<span class="map-icon map-icon-cafe"></span>'
+    }
   });
 }
 
