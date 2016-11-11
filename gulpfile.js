@@ -78,6 +78,7 @@ gulp.task('watch', function () {
     gulp.watch('app/**/*.html');
     gulp.watch('app/**/*.js', ['lint', 'scripts']);
     gulp.watch('assets/css/**/*.scss', ['sass']);
+    gulp.watch('server.js');
 });
 
 

@@ -22,7 +22,8 @@
     "angular-route": "^1.5.8",
     "angular-google-maps": "^2.4.0",
     "angular-google-places-autocomplete": "^0.2.7",
-    "google-maps": "^3.2.1"
+    "google-maps": "^3.2.1",
+    "map-icons": "^3.0.0"
   },
   "devDependencies": {}
 }

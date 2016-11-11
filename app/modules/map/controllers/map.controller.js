@@ -1,194 +1,7 @@
-map.controller('MapController', function($scope) {
+map.controller('MapController', function($scope, uiGmapIsReady) {
   $scope.enableMap = true;
 
-  var styleArray = [
-    {
-        "featureType": "water",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#d3d3d3"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "stylers": [
-            {
-                "color": "#808080"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#b3b3b3"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#ffffff"
-            },
-            {
-                "weight": 1.8
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#d7d7d7"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#ebebeb"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#a7a7a7"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#efefef"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#696969"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#737373"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#d6d6d6"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {},
-    {
-        "featureType": "poi",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#dadada"
-            }
-        ]
-    }
-]
-
   $scope.map = {
-    control: {},
     center: {
       latitude: 0,
       longitude: 0
@@ -196,21 +9,333 @@ map.controller('MapController', function($scope) {
     zoom: 2,
   };
 
-  $scope.options = {
-     styles: styleArray
-  };
+  var styleArray = [
+    {
+        "featureType": "all",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "saturation": 36
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 40
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            },
+            {
+                "weight": 1.2
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.country",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.province",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.province",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.locality",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.locality",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.land_parcel",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 21
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 29
+            },
+            {
+                "weight": 0.2
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 18
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 19
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    }
+]
 
-  var directionsDisplay = new google.maps.DirectionsRenderer();
+$scope.options = {
+   styles: styleArray
+};
+
+  // var map = new google.maps.Map(document.getElementById('map'));
+
+  $scope.mapControl = {};
+  var mapControl;
+  var service;
+
+  uiGmapIsReady.promise().then((function (maps) {
+    mapControl = $scope.mapControl.getGMap();
+    service = new google.maps.places.PlacesService(mapControl);
+  }));
+
+  // var directionsDisplay = new google.maps.DirectionsRenderer();
   var directionsService = new google.maps.DirectionsService();
   var geocoder = new google.maps.Geocoder();
   var routeboxer = new RouteBoxer();
-  var distance = 0.5; // km
+  var distance = 0.01; // km
 
+  directionsDisplay = new google.maps.DirectionsRenderer({
+    polylineOptions: {
+      strokeColor: "#efefef"
+    }
+    // suppressMarkers: true
+  });
+
+ //  icons for A and B markers
+ //  var icons = {
+ //  start: new Marker({
+ //    map: mapControl,
+ //    position: place.geometry.location,
+ //    icon: {
+ //      path: MAP_PIN,
+ //      fillColor: '#ff6c32',
+ //      fillOpacity: 1,
+ //      strokeColor: '',
+ //      strokeWeight: 1,
+ //      scale: 1
+ //    }
+ //  }),
+ //  end: new Marker({
+ //    map: mapControl,
+ //    position: place.geometry.location,
+ //    icon: {
+ //      path: MAP_PIN,
+ //      fillColor: '#70ef4c',
+ //      fillOpacity: 1,
+ //      strokeColor: '',
+ //      strokeWeight: 0,
+ //      scale: 1
+ //    }
+ //  })
+ // };
 
   // directions object -- with defaults
-  $scope.directions = {
-    showList: false
-  }
+  // $scope.directions = {
+  //   showList: false
+  // }
 
   $scope.getDirections = function () {
     console.log($scope.directions);
@@ -241,7 +366,7 @@ map.controller('MapController', function($scope) {
 
         searchBounds(bounds);
 
-        directionsDisplay.setMap($scope.map.control.getGMap());
+        directionsDisplay.setMap($scope.mapControl.getGMap());
         // directionsDisplay.setPanel(document.getElementById('directionsList'));
         $scope.directions.showList = true;
       } else {
@@ -253,7 +378,7 @@ map.controller('MapController', function($scope) {
   function searchBounds(bound) {
     console.log("outer func");
     console.log(bound);
-     for (var i = 0; i < bound; i++) {
+     for (var i = 0; i < bound.length; i++) {
        console.log(i);
        (function(i) {
          setTimeout(function() {
@@ -263,31 +388,35 @@ map.controller('MapController', function($scope) {
 
            //If the last box
            if ((bound.length - 1) === i) {
-             addAllMarkers(bound);
+            //  bound.forEach(addMarker);
            }
          }, 400 * i);
        }(i));
      }
    }
 
-//  function addAllMarkers(place) {
-//   var marker = new google.maps.Marker({
-//     map: map,
-//     position: place.geometry.location,
-//     icon: {
-//       url: 'http://maps.gstatic.com/mapfiles/circle.png',
-//       anchor: new google.maps.Point(10, 10),
-//       scaledSize: new google.maps.Size(10, 17)
-//     }
-//   });
-// }
+ function addMarker(place) {
+  var marker = new Marker({
+    map: mapControl,
+    position: place.geometry.location,
+    icon: {
+      path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
+      fillColor: '#00CCBB',
+      fillOpacity: 0.5,
+      strokeColor: '',
+      strokeWeight: 1,
+      scale: 0.5
+    },
+    // map_icon_label: '<span class="map-icon map-icon-cafe"></span>'
+  });
+}
 
 
  function performSearch(bound) {
    console.log("perform");
    var request = {
      bounds: bound,
-     keyword: 'bars'
+     keyword: 'restaurant'
    };
 
    currentBound = bound;
@@ -301,19 +430,22 @@ map.controller('MapController', function($scope) {
 
  function callback(results, status) {
    console.log("callback func");
+   console.log("nasze results");
+   console.log(results);
    if (status !== google.maps.places.PlacesServiceStatus.OK) {
      console.error(status);
      return;
    }
+   results.forEach(addMarker);
 
    for (var i = 0, result; result = results[i]; i++) {
      // Go through each result from the search and if the place exist already in our list of places then done push it in to the array
-     if (!placeExists(result.id)) {
-       allPlaces.push(result);
-     }
+    //  if (!placeExists(result.id)) {
+      //  allPlaces.push(result);
+    //  }
    }
-   console.log("all places");
-   console.log(allPlaces);
+  //  console.log("all places");
+  //  console.log(allPlaces);
  }
 
   // bound.contains(new google.maps.LatLng(allPlaces[j].geometry.location.lat(), allPlaces[j].geometry.location.lng()))

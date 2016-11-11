@@ -1,15 +1,90 @@
-var express = require('express'),
-    httpProxy = require('http-proxy'),
-    proxy = httpProxy.createProxyServer({}),
-    app = express();
+var express = require('express')
+var mongodb = require('mongodb')
+var bodyParser = require('body-parser')
+var uuid = require('uuid')
 
-app.use(express.static('.'));
+var app = express()
+var PORT = 9000
+var url = "mongodb://admin:admin@ds143777.mlab.com:43777/roadtripplanner"
 
-// app.all('/*', function(req, res){
-//     req.url = req.url.substr(4);
-//     proxy.web(req, res, { target: 'http://localhost:3333' });
-// });
+var MongoClient = mongodb.MongoClient
 
-app.listen(9000, function(){
-    console.log('Server started!');
-});
+//callback - ak sie polaczy z mongodb to wykonaj cos
+function connect (callback) {
+  MongoClient.connect(url, function (err, db) {
+    if (!err) {
+      console.log('Connected to MongoDB')
+      callback(db)
+    } else {
+    console.log('Error while connecting to MongoDB')
+      console.log(err)
+    }
+  })
+}
+
+
+//zeby miec dostep do db wewnatrz funkcji connect
+function wrapper (db) {
+  return function (req, res, next) {
+    req.db = db
+    next()
+  }
+}
+
+function updateUserToken (db, user, callback) {
+  var users = db.collection('users')
+  var token = uuid.v1()
+  users.updateOne({ username: user.username }, { $set: { token: token } }, function (err, result) {
+    callback(!err ? token : null)
+  })
+}
+
+function login (req, res) {
+  var users = req.db.collection('users')
+  users.findOne({ username: req.body.username }, function (err, user) {
+    new Promise(function (resolve, reject) {
+      if (!err) {
+        if (!user) {
+          reject('Username does not exist')
+        }
+        else {
+          if (user.password === req.body.password) {
+            updateUserToken(req.db, user, function (result) {
+              if (result) {
+                resolve(result)
+              } else {
+                reject('Token error')
+              }
+            })
+          }
+          else {
+            reject('Incorrect password')
+          }
+        }
+      } else {
+        reject('An error has occured')
+      }
+    })
+      .then(function (token) {
+        //tutaj trafia jestli jest wywolane resolve
+        res.send(token)
+      })
+      .catch(function (error) {
+        //tutaj jestli jest wywolane reject
+        res.status(401).send(error)
+      })
+  })
+}
+
+//wywoluje listen w tej funkcji dlatego ze aplikacja uruchomi sie tylko gdy jest polaczenie z baza
+connect(function (db) {
+  app.use(bodyParser.json())
+  app.use(wrapper(db))
+  app.post('/login', login)
+  app.use(express.static('.'))
+
+  app.listen(PORT, function () {
+    console.log('Listening on port:', PORT)
+  })
+
+})

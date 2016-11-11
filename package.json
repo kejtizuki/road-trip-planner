@@ -1,0 +1,39 @@
+{
+  "name": "roadtripplanner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-express": "^0.3.5",
+    "gulp-jshint": "^2.0.1",
+    "gulp-live-server": "^0.0.30",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "http-proxy": "^1.14.0",
+    "jshint": "^2.9.3",
+    "mongodb": "^2.2.11",
+    "uuid": "^2.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kejtizuki/road-trip-planner.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kejtizuki/road-trip-planner/issues"
+  },
+  "homepage": "https://github.com/kejtizuki/road-trip-planner#readme"
+}
