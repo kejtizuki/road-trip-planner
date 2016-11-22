@@ -6,8 +6,17 @@ map.controller('MapController', function($scope, uiGmapIsReady) {
       latitude: 0,
       longitude: 0
     },
+    disableDefaultUI: true,
     zoom: 2,
   };
+
+  $scope.myCat = "";
+  $scope.selectedBars = false;
+
+  // console.log(document.getElementById('bars').checked);
+
+  // $scope.categories = ['bars', 'museums'];
+
 
   var styleArray = [
     {
@@ -295,7 +304,7 @@ $scope.options = {
   var directionsService = new google.maps.DirectionsService();
   var geocoder = new google.maps.Geocoder();
   var routeboxer = new RouteBoxer();
-  var distance = 0.01; // km
+  var distance = 0.1; // km
 
   directionsDisplay = new google.maps.DirectionsRenderer({
     polylineOptions: {
@@ -304,50 +313,24 @@ $scope.options = {
     suppressMarkers: true
   });
 
- //  icons for A and B markers
- //  var icons = {
- //  start: new Marker({
- //    map: mapControl,
- //    // position: ,
- //    icon: {
- //      path: MAP_PIN,
- //      fillColor: '#ff6c32',
- //      fillOpacity: 1,
- //      strokeColor: '',
- //      strokeWeight: 1,
- //      scale: 1
- //    }
- //  }),
- //  end: new Marker({
- //    map: mapControl,
- //    // position: place.geometry.location,
- //    icon: {
- //      path: MAP_PIN,
- //      fillColor: '#70ef4c',
- //      fillOpacity: 1,
- //      strokeColor: '',
- //      strokeWeight: 0,
- //      scale: 1
- //    }
- //  })
- // };
-
  var iconStart = {
    path: MAP_PIN,
-   fillColor: '#70ef4c',
+   fillColor: '#d8d8d8',
    fillOpacity: 1,
    strokeColor: '',
    strokeWeight: 0,
-   scale: 1
+   scale: 0.6,
+   title: 'A'
  }
 
  var iconEnd = {
    path: MAP_PIN,
-   fillColor: 'red',
+   fillColor: '#d8d8d8',
    fillOpacity: 1,
    strokeColor: '',
    strokeWeight: 0,
-   scale: 1
+   scale: 0.6,
+   title: 'B'
  }
 
   // directions object -- with defaults
@@ -357,6 +340,10 @@ $scope.options = {
 
   $scope.getDirections = function () {
     console.log($scope.directions);
+
+    if ($scope.selectedBars === true) {
+      $scope.myCat = 'bars'
+    }
 
     var request = {
       origin: $scope.directions.origin.formatted_address,
@@ -374,7 +361,7 @@ $scope.options = {
         position: position,
         map: mapControl,
         icon: icon,
-        map_icon_label: '<span class="map-icon map-icon-circle"></span>',
+        // map_icon_label: '<span class="map-icon map-icon-circle"></span>',
         title: title
       });
     }
@@ -389,13 +376,13 @@ $scope.options = {
         console.log("res loc");
         console.log(response.routes[0].legs[0].start_location);
 
-        makeMarker( response.routes[0].legs[0].start_location, iconStart, "title" );
-        makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'title' );
+        makeMarker( response.routes[0].legs[0].start_location, iconStart, "A" );
+        makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'B' );
 
         var path = response.routes[0].overview_path;
         bounds = routeboxer.box(path, distance);
 
-        searchBounds(bounds);
+        searchBounds(bounds, $scope.myCat);
 
         directionsDisplay.setMap($scope.mapControl.getGMap());
         // directionsDisplay.setPanel(document.getElementById('directionsList'));
@@ -406,7 +393,7 @@ $scope.options = {
     });
   }
 
-  function searchBounds(bound) {
+  function searchBounds(bound, category) {
     console.log("outer func");
     console.log(bound);
      for (var i = 0; i < bound.length; i++) {
@@ -415,7 +402,7 @@ $scope.options = {
          setTimeout(function() {
 
            // Perform search on the bound and save the result
-           performSearch(bound[i]);
+           performSearch(bound[i], category);
 
            //If the last box
            if ((bound.length - 1) === i) {
@@ -435,19 +422,20 @@ $scope.options = {
       fillColor: '#00CCBB',
       fillOpacity: 0.5,
       strokeColor: '',
-      strokeWeight: 1,
+      strokeWeight: 0,
       scale: 0.5
     }
   });
 }
 
 
- function performSearch(bound) {
+ function performSearch(bound, category) {
    console.log("perform");
    var request = {
      bounds: bound,
-     keyword: 'restaurant'
+     keyword: category
    };
+
 
    currentBound = bound;
    service.radarSearch(request, callback);

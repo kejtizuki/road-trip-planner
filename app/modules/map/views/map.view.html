@@ -16,6 +16,15 @@
               <input type="text" id="destination" class="form-control" g-places-autocomplete ng-model="directions.destination" />
             </div>
           </div>
+          <div class="">
+            <!-- <div class="col-sm-8" ng-repeat="(key, category) in categories"> -->
+              <!-- <input type="checkbox" name="" value="{category}" id="'{{category}}'" ng-model="selectedCategory" ng-true-value="'{{category}}'" />{{category}} -->
+              <!-- <tt>value = {{category}}</tt><br/> -->
+              <!-- <input type="checkbox" name="" value="" ng-model="category" ng-true-value="'bars'">Bars
+              <tt>value2 = {{category}}</tt><br/> -->
+              <input type="checkbox" value="'bars'" ng-model="selectedBars" />bars {{selectedBars}}
+            </div>
+          </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-8">
               <button class="btn btn-primary" ng-click="getDirections()">Get Directions</button>
