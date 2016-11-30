@@ -357,9 +357,6 @@ $scope.options = {
   // }
 
   $scope.getDirections = function () {
-    // console.log($scope.directions);
-
-    // console.log($scope.selection);
 
     var request = {
       origin: $scope.directions.origin.formatted_address,
@@ -383,14 +380,9 @@ $scope.options = {
     }
 
     directionsService.route(request, function (response, status) {
-      // console.log("response");
-      // console.log(response);
 
       if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
-
-        // console.log("res loc");
-        // console.log(response.routes[0].legs[0].start_location);
 
         makeMarker( response.routes[0].legs[0].start_location, iconStart, "A" );
         makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'B' );
@@ -474,7 +466,6 @@ function addMarkerMuseums(place) {
 
 
  function performSearchBars(bound) {
-  //  console.log("perform bars");
    var request = {
      bounds: bound,
      keyword: $scope.selection[0]
@@ -483,32 +474,48 @@ function addMarkerMuseums(place) {
    currentBound = bound;
    var results_bars = service.radarSearch(request, callback);
 
-  //  console.log(service.radarSearch(request, callback));
-
  }
 
  function performSearchMuseums(bound) {
-
-  //  console.log("perform museums");
    var request = {
      bounds: bound,
      keyword: $scope.selection[1]
    };
 
    currentBound = bound;
-   var results_museum = service.radarSearch(request, callback);
-
-  //  console.log(service.radarSearch(request, callback));
-
+   service.radarSearch(request, callback);
    return true;
 }
 
- // Call back function from the radar search
+function arrayContains(needle, arrhaystack)
+{
+    return (arrhaystack.indexOf(needle) > -1);
+}
+
+function checkType(res) {
+  var geocoder = new google.maps.Geocoder;
+  geocoder.geocode({'placeId': res.place_id}, function(results, status) {
+     if (status === 'OK') {
+       if (results[0]) {
+         console.log("typy", results[0].types);
+         if (arrayContains("bar", results[0].types)) {
+            addMarkerBars(res);
+         }
+         if (arrayContains("museum", results[0].types)){
+            addMarkerMuseums(res);
+         }
+       }
+       else {
+         window.alert('No results found');
+       }
+     }
+     else {
+       window.alert('Geocoder failed due to: ' + status);
+     }
+   });
+}
 
  function callback(results, status) {
-  //  console.log("CALLBACK FUNC");
-
-  //  console.log(results);
    if (status !== google.maps.places.PlacesServiceStatus.OK) {
      console.error(status);
      return;
@@ -516,12 +523,19 @@ function addMarkerMuseums(place) {
   //  for (var i = 0; i < $scope.selection.length; i++) {
      if ($scope.selection[0] && $scope.selection[1]){
 
+       console.log("długość", results.length);
+
        for (var i = 0; i < results.length; i++) {
-        //  results[i].
+         setTimeout(checkType(results[i], i), 1000);
        }
 
-       results.forEach(addMarkerMuseums);
-       results.forEach(addMarkerBars);
+// debugger;
+
+        // console.log(results.types);
+
+       //
+      //  results.forEach(addMarkerMuseums);
+      //  results.forEach(addMarkerBars);
      }
      else if ($scope.selection[0]) {
        results.forEach(addMarkerBars);
