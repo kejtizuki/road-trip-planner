@@ -17,12 +17,16 @@
             </div>
           </div>
           <div class="">
-            <!-- <div class="col-sm-8" ng-repeat="(key, category) in categories"> -->
-              <!-- <input type="checkbox" name="" value="{category}" id="'{{category}}'" ng-model="selectedCategory" ng-true-value="'{{category}}'" />{{category}} -->
+            <div class="col-sm-8" ng-repeat="category in categories">
+              <input type="checkbox" name="selectedCategories[]" value="{{category.name}}" id="'{{category}}'" ng-model="category.selected" />{{category.name}}
+
+              {{selection | json}}
+
               <!-- <tt>value = {{category}}</tt><br/> -->
               <!-- <input type="checkbox" name="" value="" ng-model="category" ng-true-value="'bars'">Bars
               <tt>value2 = {{category}}</tt><br/> -->
-              <input type="checkbox" value="'bars'" ng-model="selectedBars" />bars {{selectedBars}}
+              <!-- <input type="checkbox" value="'bars'" ng-model="selectedBars" />bars -->
+              <!-- <input type="checkbox" value="'museums'" ng-model="selectedMuseums" />museums  -->
             </div>
           </div>
           <div class="form-group">

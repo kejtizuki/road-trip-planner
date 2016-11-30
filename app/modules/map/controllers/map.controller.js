@@ -1,4 +1,4 @@
-map.controller('MapController', function($scope, uiGmapIsReady) {
+map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filterFilter) {
   $scope.enableMap = true;
 
   $scope.map = {
@@ -10,8 +10,26 @@ map.controller('MapController', function($scope, uiGmapIsReady) {
     zoom: 2,
   };
 
-  $scope.myCat = "";
+  // $rootScope.myCat = [];
   $scope.selectedBars = false;
+  $scope.selectedMuseums = false;
+
+  $scope.categories = [
+    { name: 'bars', selected: false },
+    { name: 'museums', selected: false }
+  ];
+
+  $scope.selection = [];
+
+  $scope.selectedCategories = function selectedCategories() {
+    return filterFilter($scope.categories, { selected: true });
+  };
+
+  $scope.$watch('categories|filter:{selected:true}', function (nv) {
+    $scope.selection = nv.map(function (category) {
+      return category.name;
+    });
+  }, true);
 
   // console.log(document.getElementById('bars').checked);
 
@@ -339,11 +357,9 @@ $scope.options = {
   // }
 
   $scope.getDirections = function () {
-    console.log($scope.directions);
+    // console.log($scope.directions);
 
-    if ($scope.selectedBars === true) {
-      $scope.myCat = 'bars'
-    }
+    // console.log($scope.selection);
 
     var request = {
       origin: $scope.directions.origin.formatted_address,
@@ -367,14 +383,14 @@ $scope.options = {
     }
 
     directionsService.route(request, function (response, status) {
-      console.log("response");
-      console.log(response);
+      // console.log("response");
+      // console.log(response);
 
       if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
 
-        console.log("res loc");
-        console.log(response.routes[0].legs[0].start_location);
+        // console.log("res loc");
+        // console.log(response.routes[0].legs[0].start_location);
 
         makeMarker( response.routes[0].legs[0].start_location, iconStart, "A" );
         makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'B' );
@@ -382,7 +398,7 @@ $scope.options = {
         var path = response.routes[0].overview_path;
         bounds = routeboxer.box(path, distance);
 
-        searchBounds(bounds, $scope.myCat);
+        searchBounds(bounds, $rootScope.myCat);
 
         directionsDisplay.setMap($scope.mapControl.getGMap());
         // directionsDisplay.setPanel(document.getElementById('directionsList'));
@@ -394,32 +410,60 @@ $scope.options = {
   }
 
   function searchBounds(bound, category) {
-    console.log("outer func");
-    console.log(bound);
+    // console.log("outer func");
+    // console.log(bound);
      for (var i = 0; i < bound.length; i++) {
-       console.log(i);
+      //  console.log(i);
        (function(i) {
          setTimeout(function() {
 
            // Perform search on the bound and save the result
-           performSearch(bound[i], category);
+           performSearchBars(bound[i]);
+           performSearchMuseums(bound[i])
 
            //If the last box
-           if ((bound.length - 1) === i) {
-            //  bound.forEach(addMarker);
-           }
+          //  if ((bound.length - 1) === i) {
+            //  bound.forEach(addMarkerBars);
+          //  }
          }, 400 * i);
        }(i));
      }
    }
 
- function addMarker(place) {
+ function addMarkerBars(place) {
+  // var color = "";
+  // for (var i = 0; i < $scope.selection.length; i++) {
+  //   if ($scope.selection[i] === 'bars') {
+  //     color = "yellow";
+  //   }
+  //   else if ($scope.selection[i] === 'museums') {
+  //     color = "white";
+  //   }
+  // }
+
   var marker = new Marker({
     map: mapControl,
     position: place.geometry.location,
     icon: {
       path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
-      fillColor: '#00CCBB',
+      // fillColor: '#00CCBB',
+      fillColor: "yellow",
+      fillOpacity: 0.5,
+      strokeColor: '',
+      strokeWeight: 0,
+      scale: 0.5
+    }
+  });
+}
+
+function addMarkerMuseums(place) {
+  var marker = new Marker({
+    map: mapControl,
+    position: place.geometry.location,
+    icon: {
+      path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
+      // fillColor: '#00CCBB',
+      fillColor: "red",
       fillOpacity: 0.5,
       strokeColor: '',
       strokeWeight: 0,
@@ -429,32 +473,63 @@ $scope.options = {
 }
 
 
- function performSearch(bound, category) {
-   console.log("perform");
+ function performSearchBars(bound) {
+  //  console.log("perform bars");
    var request = {
      bounds: bound,
-     keyword: category
+     keyword: $scope.selection[0]
    };
 
-
    currentBound = bound;
-   service.radarSearch(request, callback);
+   var results_bars = service.radarSearch(request, callback);
 
-   console.log(service.radarSearch(request, callback));
+  //  console.log(service.radarSearch(request, callback));
 
  }
+
+ function performSearchMuseums(bound) {
+
+  //  console.log("perform museums");
+   var request = {
+     bounds: bound,
+     keyword: $scope.selection[1]
+   };
+
+   currentBound = bound;
+   var results_museum = service.radarSearch(request, callback);
+
+  //  console.log(service.radarSearch(request, callback));
+
+   return true;
+}
 
  // Call back function from the radar search
 
  function callback(results, status) {
-   console.log("callback func");
-   console.log("nasze results");
-   console.log(results);
+  //  console.log("CALLBACK FUNC");
+
+  //  console.log(results);
    if (status !== google.maps.places.PlacesServiceStatus.OK) {
      console.error(status);
      return;
    }
-   results.forEach(addMarker);
+  //  for (var i = 0; i < $scope.selection.length; i++) {
+     if ($scope.selection[0] && $scope.selection[1]){
+
+       for (var i = 0; i < results.length; i++) {
+        //  results[i].
+       }
+
+       results.forEach(addMarkerMuseums);
+       results.forEach(addMarkerBars);
+     }
+     else if ($scope.selection[0]) {
+       results.forEach(addMarkerBars);
+     }
+     else if ($scope.selection[1]) {
+       results.forEach(addMarkerMuseums);
+     }
+  //  }
 
    for (var i = 0, result; result = results[i]; i++) {
      // Go through each result from the search and if the place exist already in our list of places then done push it in to the array
