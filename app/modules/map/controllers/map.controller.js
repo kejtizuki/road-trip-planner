@@ -36,169 +36,283 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
   // $scope.categories = ['bars', 'museums'];
 
 
-  var styleArray = [
+//   var styleArray = [
+//     {
+//         "featureType": "all",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "labels",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "labels.text",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "labels.text.fill",
+//         "stylers": [
+//             {
+//                 "saturation": 36
+//             },
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 40
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "labels.text.stroke",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             },
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 16
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "labels.icon",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative",
+//         "elementType": "geometry.fill",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 20
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative",
+//         "elementType": "geometry.stroke",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 17
+//             },
+//             {
+//                 "weight": 1.2
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.country",
+//         "elementType": "all",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.province",
+//         "elementType": "all",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.province",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.locality",
+//         "elementType": "all",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.locality",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.neighborhood",
+//         "elementType": "all",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.neighborhood",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "administrative.land_parcel",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "visibility": "on"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "landscape",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 20
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "poi",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 21
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "road.highway",
+//         "elementType": "geometry.fill",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 17
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "road.highway",
+//         "elementType": "geometry.stroke",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 29
+//             },
+//             {
+//                 "weight": 0.2
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "road.arterial",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 18
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "road.local",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 16
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "transit",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 19
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "water",
+//         "elementType": "geometry",
+//         "stylers": [
+//             {
+//                 "color": "#000000"
+//             },
+//             {
+//                 "lightness": 17
+//             }
+//         ]
+//     }
+// ]
+
+var styleArray = [
     {
-        "featureType": "all",
+        "featureType": "water",
         "elementType": "geometry",
         "stylers": [
             {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "saturation": 36
-            },
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 40
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 16
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#000000"
+                "color": "#e9e9e9"
             },
             {
                 "lightness": 17
-            },
-            {
-                "weight": 1.2
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.country",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.province",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.province",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.neighborhood",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.neighborhood",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "on"
             }
         ]
     },
@@ -207,22 +321,10 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#f5f5f5"
             },
             {
                 "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#000000"
-            },
-            {
-                "lightness": 21
             }
         ]
     },
@@ -231,7 +333,7 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#ffffff"
             },
             {
                 "lightness": 17
@@ -243,7 +345,7 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry.stroke",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#ffffff"
             },
             {
                 "lightness": 29
@@ -258,7 +360,7 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#ffffff"
             },
             {
                 "lightness": 18
@@ -270,10 +372,70 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#ffffff"
             },
             {
                 "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#f5f5f5"
+            },
+            {
+                "lightness": 21
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#dedede"
+            },
+            {
+                "lightness": 21
+            }
+        ]
+    },
+    {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#ffffff"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "saturation": 36
+            },
+            {
+                "color": "#333333"
+            },
+            {
+                "lightness": 40
+            }
+        ]
+    },
+    {
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
             }
         ]
     },
@@ -282,7 +444,7 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         "elementType": "geometry",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#f2f2f2"
             },
             {
                 "lightness": 19
@@ -290,14 +452,29 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
         ]
     },
     {
-        "featureType": "water",
-        "elementType": "geometry",
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#000000"
+                "color": "#fefefe"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#fefefe"
             },
             {
                 "lightness": 17
+            },
+            {
+                "weight": 1.2
             }
         ]
     }
@@ -326,7 +503,7 @@ $scope.options = {
 
   directionsDisplay = new google.maps.DirectionsRenderer({
     polylineOptions: {
-      strokeColor: "#efefef"
+      strokeColor: "#544d4d"
     },
     suppressMarkers: true
   });
@@ -402,14 +579,9 @@ $scope.options = {
   }
 
   function searchBounds(bound, category) {
-    // console.log("outer func");
-    // console.log(bound);
      for (var i = 0; i < bound.length; i++) {
-      //  console.log(i);
        (function(i) {
          setTimeout(function() {
-
-           // Perform search on the bound and save the result
            performSearchBars(bound[i]);
            performSearchMuseums(bound[i])
 
@@ -472,8 +644,8 @@ function addMarkerMuseums(place) {
    };
 
    currentBound = bound;
-   var results_bars = service.radarSearch(request, callback);
-
+   service.radarSearch(request, callback);
+   return true;
  }
 
  function performSearchMuseums(bound) {
@@ -495,13 +667,14 @@ function arrayContains(needle, arrhaystack)
 function checkType(res) {
   var geocoder = new google.maps.Geocoder;
   geocoder.geocode({'placeId': res.place_id}, function(results, status) {
+    console.log("results ", results);
      if (status === 'OK') {
        if (results[0]) {
          console.log("typy", results[0].types);
          if (arrayContains("bar", results[0].types)) {
             addMarkerBars(res);
          }
-         if (arrayContains("museum", results[0].types)){
+         else if (arrayContains("museum", results[0].types)){
             addMarkerMuseums(res);
          }
        }
@@ -523,10 +696,10 @@ function checkType(res) {
   //  for (var i = 0; i < $scope.selection.length; i++) {
      if ($scope.selection[0] && $scope.selection[1]){
 
-       console.log("długość", results.length);
+      //  console.log("długość", results.length);
 
        for (var i = 0; i < results.length; i++) {
-         setTimeout(checkType(results[i], i), 1000);
+         checkType(results[i]);
        }
 
 // debugger;

@@ -1,3 +1,30 @@
 @import '../../app/components/navigation/nav.style.scss';
 @import '../../app/modules/main/styles/main.style.scss';
 @import '../../app/modules/map/styles/map.style.scss';
+
+body {
+  font-family: 'Raleway';
+}
+
+.form-group {
+  padding-top: 20px;
+  // display: inline-block;
+  // float: left;
+  // .control-label {
+  //   text-align: left;
+  // }
+
+  input {
+    border-radius: 0;
+  }
+  .col-sm-12 {
+    text-align: center;
+    .btn {
+      border-radius: 0;
+      background-color: none;
+    }
+  }
+}
+.checkboxes {
+  // display: inline-block;
+}
