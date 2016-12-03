@@ -587,24 +587,18 @@ $scope.options = {
 
            //If the last box
           //  if ((bound.length - 1) === i) {
-            //  bound.forEach(addMarkerBars);
+          //    addMarkerBars(bound);
           //  }
          }, 400 * i);
        }(i));
      }
    }
 
- function addMarkerBars(place) {
-  // var color = "";
-  // for (var i = 0; i < $scope.selection.length; i++) {
-  //   if ($scope.selection[i] === 'bars') {
-  //     color = "yellow";
-  //   }
-  //   else if ($scope.selection[i] === 'museums') {
-  //     color = "white";
-  //   }
-  // }
+   var popup = new google.maps.InfoWindow({
+      content: "<h1>place.id</h1>"
+   });
 
+function addMarkerBars(place) {
   var marker = new Marker({
     map: mapControl,
     position: place.geometry.location,
@@ -617,6 +611,10 @@ $scope.options = {
       strokeWeight: 0,
       scale: 0.5
     }
+  });
+  google.maps.event.addListener(marker, 'click', function(e) {
+     console.log(e);
+     popup.open($scope.map, this);
   });
 }
 
@@ -634,8 +632,28 @@ function addMarkerMuseums(place) {
       scale: 0.5
     }
   });
+
+  google.maps.event.addListener(marker, 'click', function(e) {
+     console.log(e);
+     popup.open($scope.map, this, place.id);
+  });
 }
 
+function callbackBars (results, status) {
+  if (status !== google.maps.places.PlacesServiceStatus.OK) {
+    console.error(status);
+    return;
+  }
+   results.forEach(addMarkerBars);
+}
+
+function callbackMuseums (results, status) {
+  if (status !== google.maps.places.PlacesServiceStatus.OK) {
+    console.error(status);
+    return;
+  }
+   results.forEach(addMarkerMuseums);
+}
 
  function performSearchBars(bound) {
    var request = {
@@ -644,7 +662,7 @@ function addMarkerMuseums(place) {
    };
 
    currentBound = bound;
-   service.radarSearch(request, callback);
+   service.radarSearch(request, callbackBars);
    return true;
  }
 
@@ -655,81 +673,77 @@ function addMarkerMuseums(place) {
    };
 
    currentBound = bound;
-   service.radarSearch(request, callback);
+   service.radarSearch(request, callbackMuseums);
    return true;
 }
 
-function arrayContains(needle, arrhaystack)
-{
-    return (arrhaystack.indexOf(needle) > -1);
-}
+// function arrayContains(needle, arrhaystack)
+// {
+//     return (arrhaystack.indexOf(needle) > -1);
+// }
 
-function checkType(res) {
-  var geocoder = new google.maps.Geocoder;
-  geocoder.geocode({'placeId': res.place_id}, function(results, status) {
-    console.log("results ", results);
-     if (status === 'OK') {
-       if (results[0]) {
-         console.log("typy", results[0].types);
-         if (arrayContains("bar", results[0].types)) {
-            addMarkerBars(res);
-         }
-         else if (arrayContains("museum", results[0].types)){
-            addMarkerMuseums(res);
-         }
-       }
-       else {
-         window.alert('No results found');
-       }
-     }
-     else {
-       window.alert('Geocoder failed due to: ' + status);
-     }
-   });
-}
+// function checkType(res) {
+//   var geocoder = new google.maps.Geocoder;
+//   geocoder.geocode({'placeId': res.place_id}, function(results, status) {
+//     console.log("results ", results);
+//      if (status === 'OK') {
+//        if (results[0]) {
+//          console.log("typy", results[0].types);
+//          if (arrayContains("bar", results[0].types)) {
+//             addMarkerBars(res);
+//          }
+//          else if (arrayContains("museum", results[0].types)){
+//             addMarkerMuseums(res);
+//          }
+//        }
+//        else {
+//          window.alert('No results found');
+//        }
+//      }
+//      else {
+//        window.alert('Geocoder failed due to: ' + status);
+//      }
+//    });
+// }
 
- function callback(results, status) {
-   if (status !== google.maps.places.PlacesServiceStatus.OK) {
-     console.error(status);
-     return;
-   }
-  //  for (var i = 0; i < $scope.selection.length; i++) {
-     if ($scope.selection[0] && $scope.selection[1]){
-
-      //  console.log("długość", results.length);
-
-       for (var i = 0; i < results.length; i++) {
-         checkType(results[i]);
-       }
-
-// debugger;
-
-        // console.log(results.types);
-
-       //
-      //  results.forEach(addMarkerMuseums);
-      //  results.forEach(addMarkerBars);
-     }
-     else if ($scope.selection[0]) {
-       results.forEach(addMarkerBars);
-     }
-     else if ($scope.selection[1]) {
-       results.forEach(addMarkerMuseums);
-     }
+ // function callback(results, status) {
+ //   if (status !== google.maps.places.PlacesServiceStatus.OK) {
+ //     console.error(status);
+ //     return;
+ //   }
+ //   if ($scope.selection[0] && $scope.selection[1]){
+    //  console.log("OBA: ", results.length);
+    //  for (var i = 0; i < results.length; i++) {
+    //    (function(i) {
+    //      setTimeout(function() {
+    //        checkType(results[i]);
+    //      }, 400 * i);
+    //    }(i));
+    //  }
+  //   console.log(results);
+  //   results.forEach(addMarkerBars);
   //  }
-
-   for (var i = 0, result; result = results[i]; i++) {
+  //  else if ($scope.selection[0]) {
+  //    console.log("bary result length: ", results.length);
+  //    results.forEach(addMarkerBars);
+  //  }
+  //  else if ($scope.selection[1]) {
+  //    console.log("muzea : ", results.length)
+  //    results.forEach(addMarkerMuseums);
+  //  }
+   //
+  //  for (var i = 0, result; result = results[i]; i++) {
      // Go through each result from the search and if the place exist already in our list of places then done push it in to the array
     //  if (!placeExists(result.id)) {
       //  allPlaces.push(result);
     //  }
-   }
+  //  }
   //  console.log("all places");
   //  console.log(allPlaces);
- }
+ // }
 
   // bound.contains(new google.maps.LatLng(allPlaces[j].geometry.location.lat(), allPlaces[j].geometry.location.lng()))
 
-  $scope.route = {start: '', end: ''};
+  // $scope.route = {start: '', end: ''};
 
 })
