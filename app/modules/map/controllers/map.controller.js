@@ -594,18 +594,20 @@ $scope.options = {
      }
    }
 
-   var popup = new google.maps.InfoWindow({
-      content: "<h1>place.id</h1>"
-   });
+  //  var popup = new google.maps.InfoWindow({
+  //     content: "<h1>place.id</h1>"
+  //  });
 
-function addMarkerBars(place) {
+  var infowindow = new google.maps.InfoWindow();
+
+function addMarkers(place, color) {
   var marker = new Marker({
     map: mapControl,
     position: place.geometry.location,
     icon: {
       path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
       // fillColor: '#00CCBB',
-      fillColor: "yellow",
+      fillColor: color,
       fillOpacity: 0.5,
       strokeColor: '',
       strokeWeight: 0,
@@ -614,37 +616,46 @@ function addMarkerBars(place) {
   });
   google.maps.event.addListener(marker, 'click', function(e) {
      console.log(e);
-     popup.open($scope.map, this);
+    var geocoder = new google.maps.Geocoder;
+    geocoder.geocode({'placeId': place.place_id}, function(results, status) {
+      console.log(results[0]);
+      infowindow.setContent('<div><h4>' + results[0].address_components[0].long_name + '</h4>'
+      + results[0].formatted_address.substring(results[0].formatted_address.indexOf(",") + 1) + '</div>');
+    });
+    infowindow.open(map, this);
   });
 }
 
-function addMarkerMuseums(place) {
-  var marker = new Marker({
-    map: mapControl,
-    position: place.geometry.location,
-    icon: {
-      path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
-      // fillColor: '#00CCBB',
-      fillColor: "red",
-      fillOpacity: 0.5,
-      strokeColor: '',
-      strokeWeight: 0,
-      scale: 0.5
-    }
-  });
-
-  google.maps.event.addListener(marker, 'click', function(e) {
-     console.log(e);
-     popup.open($scope.map, this, place.id);
-  });
-}
+// function addMarkerMuseums(place) {
+//   var marker = new Marker({
+//     map: mapControl,
+//     position: place.geometry.location,
+//     icon: {
+//       path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
+//       // fillColor: '#00CCBB',
+//       fillColor: "red",
+//       fillOpacity: 0.5,
+//       strokeColor: '',
+//       strokeWeight: 0,
+//       scale: 0.5
+//     }
+//   });
+//
+//   google.maps.event.addListener(marker, 'click', function(e) {
+//      console.log(e);
+//      popup.open($scope.map, this, place.id);
+//   });
+// }
 
 function callbackBars (results, status) {
   if (status !== google.maps.places.PlacesServiceStatus.OK) {
     console.error(status);
     return;
   }
-   results.forEach(addMarkerBars);
+  //  results.forEach(addMarkerBars);
+  for (var i = 0; i < results.length; i++) {
+    addMarkers(results[i], "#00CCBB");
+  }
 }
 
 function callbackMuseums (results, status) {
@@ -652,7 +663,10 @@ function callbackMuseums (results, status) {
     console.error(status);
     return;
   }
-   results.forEach(addMarkerMuseums);
+  //  results.forEach(addMarkerMuseums);
+  for (var i = 0; i < results.length; i++) {
+    addMarkers(results[i], "yellow");
+  }
 }
 
  function performSearchBars(bound) {
