@@ -10,7 +10,6 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
     zoom: 2,
   };
 
-  // $rootScope.myCat = [];
   $scope.selectedBars = false;
   $scope.selectedMuseums = false;
 
@@ -528,11 +527,6 @@ $scope.options = {
    title: 'B'
  }
 
-  // directions object -- with defaults
-  // $scope.directions = {
-  //   showList: false
-  // }
-
   $scope.getDirections = function () {
 
     var request = {
@@ -582,70 +576,49 @@ $scope.options = {
      for (var i = 0; i < bound.length; i++) {
        (function(i) {
          setTimeout(function() {
-           performSearchBars(bound[i]);
-           performSearchMuseums(bound[i])
-
-           //If the last box
-          //  if ((bound.length - 1) === i) {
-          //    addMarkerBars(bound);
-          //  }
+           if ($scope.categories[0].selected === true  && $scope.categories[1].selected === false) {
+             performSearchBars(bound[i]);
+           }
+           else if ($scope.categories[1].selected === true && $scope.categories[0].selected === false) {
+             performSearchMuseums(bound[i]);
+           }
+           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true){
+             performSearchBars(bound[i]);
+             performSearchMuseums(bound[i]);
+           }
+          //  performSearchBars(bound[i]);
+          //  performSearchMuseums(bound[i])
          }, 400 * i);
        }(i));
      }
    }
 
-  //  var popup = new google.maps.InfoWindow({
-  //     content: "<h1>place.id</h1>"
-  //  });
-
   var infowindow = new google.maps.InfoWindow();
 
-function addMarkers(place, color) {
-  var marker = new Marker({
-    map: mapControl,
-    position: place.geometry.location,
-    icon: {
-      path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
-      // fillColor: '#00CCBB',
-      fillColor: color,
-      fillOpacity: 0.5,
-      strokeColor: '',
-      strokeWeight: 0,
-      scale: 0.5
-    }
-  });
-  google.maps.event.addListener(marker, 'click', function(e) {
-     console.log(e);
-    var geocoder = new google.maps.Geocoder;
-    geocoder.geocode({'placeId': place.place_id}, function(results, status) {
-      console.log(results[0]);
-      infowindow.setContent('<div><h4>' + results[0].address_components[0].long_name + '</h4>'
-      + results[0].formatted_address.substring(results[0].formatted_address.indexOf(",") + 1) + '</div>');
+  function addMarkers(place, color) {
+    var marker = new Marker({
+      map: mapControl,
+      position: place.geometry.location,
+      icon: {
+        path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
+        fillColor: color,
+        fillOpacity: 0.5,
+        strokeColor: '',
+        strokeWeight: 0,
+        scale: 0.5
+      }
     });
-    infowindow.open(map, this);
-  });
-}
-
-// function addMarkerMuseums(place) {
-//   var marker = new Marker({
-//     map: mapControl,
-//     position: place.geometry.location,
-//     icon: {
-//       path: 'M 0, 0 m -10, 0 a 10, 10 0 1, 0 20, 0 a 10, 10 0 1, 0 -20, 0',
-//       // fillColor: '#00CCBB',
-//       fillColor: "red",
-//       fillOpacity: 0.5,
-//       strokeColor: '',
-//       strokeWeight: 0,
-//       scale: 0.5
-//     }
-//   });
-//
-//   google.maps.event.addListener(marker, 'click', function(e) {
-//      console.log(e);
-//      popup.open($scope.map, this, place.id);
-//   });
-// }
+    google.maps.event.addListener(marker, 'click', function(e) {
+       console.log(e);
+      var geocoder = new google.maps.Geocoder;
+      geocoder.geocode({'placeId': place.place_id}, function(results, status) {
+        console.log(results[0]);
+        infowindow.setContent('<div><h4>' + results[0].address_components[0].long_name + '</h4>'
+        + results[0].formatted_address.substring(results[0].formatted_address.indexOf(",") + 1) + '</div>');
+      });
+      infowindow.open(map, this);
+    });
+  }
 
 function callbackBars (results, status) {
   if (status !== google.maps.places.PlacesServiceStatus.OK) {
@@ -670,9 +643,10 @@ function callbackMuseums (results, status) {
 }
 
  function performSearchBars(bound) {
+   console.log("bars");
    var request = {
      bounds: bound,
-     keyword: $scope.selection[0]
+     keyword: "bars"
    };
 
    currentBound = bound;
@@ -681,9 +655,10 @@ function callbackMuseums (results, status) {
  }
 
  function performSearchMuseums(bound) {
+   console.log("museums");
    var request = {
      bounds: bound,
-     keyword: $scope.selection[1]
+     keyword: "museums"
    };
 
    currentBound = bound;
