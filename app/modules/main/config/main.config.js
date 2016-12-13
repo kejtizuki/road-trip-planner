@@ -47,6 +47,11 @@ main.config(function ($urlRouterProvider, $stateProvider) {
     url: '/register',
     templateUrl: 'app/modules/authentication/views/register.view.html',
     controller: 'AuthenticationController'
+  })
+  .state('profile', {
+    url: '/profile',
+    templateUrl: 'app/modules/profile/views/profile.view.html',
+    controller: 'ProfileController'
   });
 
 

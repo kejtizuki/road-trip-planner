@@ -15,7 +15,8 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
 
   $scope.categories = [
     { name: 'bars', selected: false },
-    { name: 'museums', selected: false }
+    { name: 'museums', selected: false },
+    { name: 'shops', selected: false}
   ];
 
   $scope.selection = [];
@@ -576,19 +577,33 @@ $scope.options = {
      for (var i = 0; i < bound.length; i++) {
        (function(i) {
          setTimeout(function() {
-           if ($scope.categories[0].selected === true  && $scope.categories[1].selected === false) {
+           if ($scope.categories[0].selected === true  && $scope.categories[1].selected === false && $scope.categories[2].selected === false) {
              performSearchBars(bound[i]);
            }
-           else if ($scope.categories[1].selected === true && $scope.categories[0].selected === false) {
+           else if ($scope.categories[1].selected === true && $scope.categories[0].selected === false && $scope.categories[2].selected === false) {
              performSearchMuseums(bound[i]);
            }
-           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true){
+           else if ($scope.categories[1].selected === false && $scope.categories[0].selected === false && $scope.categories[2].selected === true) {
+             performSearchShops(bound[i]);
+           }
+           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true && $scope.categories[2].selected === false){
              performSearchBars(bound[i]);
              performSearchMuseums(bound[i]);
            }
-          //  performSearchBars(bound[i]);
-          //  performSearchMuseums(bound[i])
-         }, 400 * i);
+           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === false && $scope.categories[2].selected === true) {
+             performSearchBars(bound[i]);
+             performSearchShops(bound[i]);
+           }
+           else if ($scope.categories[0].selected === false && $scope.categories[1].selected === true && $scope.categories[2].selected === true) {
+             performSearchMuseums(bound[i]);
+             performSearchShops(bound[i]);
+           }
+           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true && $scope.categories[2].selected === true) {
+             performSearchMuseums(bound[i]);
+             performSearchBars(bound[i]);
+             performSearchShops(bound[i]);
+           }
+         }, 1200 * i);
        }(i));
      }
    }
@@ -642,6 +657,17 @@ function callbackMuseums (results, status) {
   }
 }
 
+function callbackShops (results, status) {
+  if (status !== google.maps.places.PlacesServiceStatus.OK) {
+    console.error(status);
+    return;
+  }
+  //  results.forEach(addMarkerMuseums);
+  for (var i = 0; i < results.length; i++) {
+    addMarkers(results[i], "red");
+  }
+}
+
  function performSearchBars(bound) {
    console.log("bars");
    var request = {
@@ -664,6 +690,18 @@ function callbackMuseums (results, status) {
    currentBound = bound;
    service.radarSearch(request, callbackMuseums);
    return true;
+}
+
+function performSearchShops(bound) {
+  console.log("shops");
+  var request = {
+    bounds: bound,
+    keyword: "shops"
+  };
+
+  currentBound = bound;
+  service.radarSearch(request, callbackShops);
+  return true;
 }
 
 // function arrayContains(needle, arrhaystack)

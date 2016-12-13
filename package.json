@@ -18,7 +18,9 @@
     "gulp-uglify": "^2.0.0",
     "http-proxy": "^1.14.0",
     "jshint": "^2.9.3",
+    "jsonwebtoken": "^7.2.1",
     "mongodb": "^2.2.11",
+    "mongoose": "^4.7.2",
     "uuid": "^2.0.3"
   },
   "devDependencies": {},
