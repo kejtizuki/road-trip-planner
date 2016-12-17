@@ -3,6 +3,7 @@ var mongodb = require('mongodb')
 var bodyParser = require('body-parser')
 var uuid = require('uuid')
 var tokenMiddleware = express.Router();
+var morgan = require('morgan');
 
 var app = express()
 var PORT = 9000
@@ -79,6 +80,47 @@ function login (req, res) {
   })
 }
 
+function getProfile(req, res) {
+  //req przychodzi z frontendu
+  //res zwraca do frontu z backendu
+  var data = req.body.token; //data jest tokenem bo na froncie wyslalismy token
+  var users = req.db.collection('users')
+
+  //pobiera z bazy usera o podanym tokenie
+  users.findOne({ token: data }, function (err, user) {
+    new Promise(function (resolve, reject) {
+      if (err) {
+        reject('Error');
+        console.log("error err");
+        //res.json({status: false});
+      }
+      else if(!user) {
+        //res.json({status: false, message: "User not exist"});
+        reject('User not found');
+        console.log("error user not found");
+
+      }
+      else {
+        // res.json(user);
+        // res.end();
+        resolve(user);
+        console.log("user: ", user);
+        // res.json(user);
+      }
+    })
+    .then(function (user) {
+      console.log("fn USER", user);
+      //res.json(user);
+      var test = JSON.stringify(user)
+      res.send(test);
+    })
+    .catch(function(error) {
+      res.status(401).send();
+    })
+  })
+  console.log(data);
+}
+
 function register(req, res, callback) {
 
   var users = req.db.collection('users')
@@ -89,6 +131,10 @@ function register(req, res, callback) {
   users.insert({
     username: req.body.username,
     password: req.body.password,
+    email: req.body.email,
+    name: req.body.name,
+    surname: req.body.surname,
+    dateOfBirth: req.body.dateOfBirth,
     token: token
   });
 
@@ -102,11 +148,22 @@ function register(req, res, callback) {
 //wywoluje listen w tej funkcji dlatego ze aplikacja uruchomi sie tylko gdy jest polaczenie z baza
 connect(function (db) {
   app.use(bodyParser.json())
-  app.use(wrapper(db))
+  app.use(wrapper(db));
+  app.use(morgan('dev'))
   app.use('/login', tokenMiddleware);
-  app.use('/register', register)
-  app.post('/login', login)
-  app.use(express.static('.'))
+  app.use('/register', register);
+  app.use('/profile', getProfile)
+  app.post('/login', login);
+  //app.post('/profile', getProfile);
+  app.use(express.static('.'));
+
+  app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9000');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+  })
 
 
 
