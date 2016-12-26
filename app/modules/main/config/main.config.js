@@ -43,6 +43,18 @@ main.config(function ($urlRouterProvider, $stateProvider) {
     templateUrl: 'app/modules/authentication/views/login.view.html',
     controller: 'AuthenticationController'
   })
+  .state('logout', {
+    url: '/logout',
+      templateUrl: 'app/modules/authentication/views/logout.view.html',
+      controller: 'AuthenticationController',
+      resolve: {
+        function(){
+          if(sessionStorage.length > 0){
+            sessionStorage.clear();
+          }
+        }
+    }
+  })
   .state('register', {
     url: '/register',
     templateUrl: 'app/modules/authentication/views/register.view.html',

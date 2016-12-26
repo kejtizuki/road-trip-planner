@@ -12,12 +12,17 @@ app.service('AuthenticationService', function($http, $rootScope, $window) {
       alert("ok");
       var res = response;
       sessionStorage.userToken = res;
-      console.log(res);
+      console.log("res ", res);
+      updateUserScope($rootScope);
       $window.location.href = '/#/profile';
     })
     .error(function() {
       alert("not ok");
     });
+  }
+
+  this.logout = function() {
+
   }
 })
 
@@ -36,6 +41,7 @@ app.service('RegistrationService', function($http, $rootScope, $window) {
       var res = response;
       sessionStorage.userToken = res.token;
       console.log(res);
+      updateUserScope($rootScope);
       $window.location.href = '/#/profile';
     })
     .error(function() {

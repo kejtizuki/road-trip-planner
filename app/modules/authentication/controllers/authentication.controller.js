@@ -1,4 +1,4 @@
-register.controller('AuthenticationController', function($scope, AuthenticationService, RegistrationService, $window) {
+register.controller('AuthenticationController', function($scope, $rootScope, AuthenticationService, RegistrationService, $window) {
   console.log("reg");
 
   if (sessionStorage.userToken)
@@ -12,11 +12,6 @@ register.controller('AuthenticationController', function($scope, AuthenticationS
     //placeholder until authentication is implemented
     $scope.error_message = 'login request for ' + $scope.user.username;
     AuthenticationService.login($scope.user);
-    // .then(function() {
-    //   $window.location. = '/profile'
-    // }, function() {
-    //
-    // });
   };
 
   $scope.register = function(){
@@ -24,4 +19,6 @@ register.controller('AuthenticationController', function($scope, AuthenticationS
     $scope.error_message = 'registeration request for ' + $scope.user.username;
     RegistrationService.register($scope.user);
   };
+
+  updateUserScope($rootScope);
 });
