@@ -510,26 +510,29 @@ $scope.options = {
 
  var iconStart = {
    path: MAP_PIN,
-   fillColor: '#d8d8d8',
+   fillColor: '#544d4d',
    fillOpacity: 1,
    strokeColor: '',
    strokeWeight: 0,
-   scale: 0.6,
+   scale: 1,
    title: 'A'
  }
 
  var iconEnd = {
    path: MAP_PIN,
-   fillColor: '#d8d8d8',
+   fillColor: '#544d4d',
    fillOpacity: 1,
    strokeColor: '',
    strokeWeight: 0,
-   scale: 0.6,
+   scale: 1,
    title: 'B'
  }
 
+ $scope.showHeartButton = false;
+
   $scope.getDirections = function () {
 
+    $scope.showHeartButton = true;
     var request = {
       origin: $scope.directions.origin.formatted_address,
       destination: $scope.directions.destination.formatted_address,
@@ -546,7 +549,7 @@ $scope.options = {
         position: position,
         map: mapControl,
         icon: icon,
-        // map_icon_label: '<span class="map-icon map-icon-circle"></span>',
+        map_icon_label: '<span class="map-icon map-icon-circle"></span>',
         title: title
       });
     }
@@ -565,7 +568,6 @@ $scope.options = {
         searchBounds(bounds, $rootScope.myCat);
 
         directionsDisplay.setMap($scope.mapControl.getGMap());
-        // directionsDisplay.setPanel(document.getElementById('directionsList'));
         $scope.directions.showList = true;
       } else {
         alert('Google route unsuccesfull!');

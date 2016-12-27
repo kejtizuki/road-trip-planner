@@ -21,17 +21,20 @@
           </div>
           <div class="checkboxes">
             <div class="col-md-2" ng-repeat="category in categories">
-              <input type="checkbox" name="selectedCategories[]" value="{{category.name}}" id="'{{category}}'" ng-model="category.selected" />{{category.name}}
+              <label>
+                <input type="checkbox" name="selectedCategories[]" value="{{category.name}}" id="'{{category}}'" ng-model="category.selected" />
+                <span></span>
+                {{category.name}}
+              </label>
             </div>
           </div>
           <div class="form-group">
-            <div class="col-sm-12">
-              <button class="btn" ng-click="getDirections()">Get Directions</button>
+            <div class="col-sm-12" id="buttonsDiv">
+              <button class="btn btnGet" ng-click="getDirections()" ng-hide="showHeartButton" >Get Directions</button>
+              <button id="btnHeart" ng-click="addToHistory()" ng-show="showHeartButton"><img id="heartButton" src="assets/img/heart.png" /></button>
             </div>
           </div>
         </form>
-
-        <div id="directionsList" ng-show="directions.showList" class="panel panel-primary"></div>
 <!-- <div id="map"></div> -->
 <!-- <form>
   <div class="row">

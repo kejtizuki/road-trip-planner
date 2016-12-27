@@ -2,9 +2,58 @@
 @import '../../app/modules/main/styles/main.style.scss';
 @import '../../app/modules/map/styles/map.style.scss';
 
+$grey: #544d4d;
+
 body {
   font-family: 'Raleway';
+  overflow-x: hidden;
 }
+
+#map {
+  padding: 20px;
+}
+
+#heartButton {
+  width: 30px;
+  height: auto;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#btnHeart {
+  background-color: white;
+  border: none;
+}
+
+#buttonsDiv {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  width: auto;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid $grey;
+
+  .nav, .navbar-header {
+      a {
+        color: $grey;
+        &:hover {
+          background-color: white;
+        }
+        &:active, &:visited {
+          background-color: white;
+        }
+      }
+  }
+
+  .navbar-right {
+    padding-right: 20px;
+  }
+}
+
+
 
 .form-group {
   padding-top: 20px;
@@ -13,9 +62,9 @@ body {
   // .control-label {
   //   text-align: left;
   // }
-
   input {
     border-radius: 0;
+    border: 1px solid $grey;
   }
   .col-sm-12 {
     text-align: center;
@@ -23,8 +72,34 @@ body {
       border-radius: 0;
       background-color: none;
     }
+    .btnGet {
+      background-color: white;
+      border: 2px solid $grey;
+      font-weight: bolder;
+    }
   }
 }
 .checkboxes {
-  // display: inline-block;
+  .col-md-2 {
+    padding-left: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  label input {
+    display: none;
+  }
+  label span {
+    height: 15px;
+    width: 15px;
+    border: 1px solid $grey;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+  }
+  [type=checkbox]:checked + span:before {
+    content: '\25CF';
+    position: absolute;
+    top: -5px;
+    left: 2px;
+  }
 }

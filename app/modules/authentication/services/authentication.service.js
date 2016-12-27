@@ -9,7 +9,6 @@ app.service('AuthenticationService', function($http, $rootScope, $window) {
       data: data
     })
     .success(function(response) {
-      alert("ok");
       var res = response;
       sessionStorage.userToken = res;
       console.log("res ", res);
@@ -17,7 +16,7 @@ app.service('AuthenticationService', function($http, $rootScope, $window) {
       $window.location.href = '/#/profile';
     })
     .error(function() {
-      alert("not ok");
+
     });
   }
 
@@ -37,7 +36,6 @@ app.service('RegistrationService', function($http, $rootScope, $window) {
       data: data
     })
     .success(function(response) {
-      alert("ok");
       var res = response;
       sessionStorage.userToken = res.token;
       console.log(res);
@@ -45,7 +43,7 @@ app.service('RegistrationService', function($http, $rootScope, $window) {
       $window.location.href = '/#/profile';
     })
     .error(function() {
-      alert("not ok");
+      
     });
   }
 })
