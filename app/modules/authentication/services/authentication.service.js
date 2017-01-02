@@ -43,7 +43,7 @@ app.service('RegistrationService', function($http, $rootScope, $window) {
       $window.location.href = '/#/profile';
     })
     .error(function() {
-      
+
     });
   }
 })

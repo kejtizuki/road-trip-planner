@@ -1,4 +1,5 @@
-profile.controller('ProfileController', function($scope, $rootScope, $window, ProfileService) {
+profile.controller('ProfileController', ['ProfileService', '$scope', '$rootScope', '$window',
+function(ProfileService, $scope, $rootScope, $window) {
   var token = sessionStorage.userToken;
   console.log(token);
 
@@ -8,8 +9,8 @@ profile.controller('ProfileController', function($scope, $rootScope, $window, Pr
   }
   else {
     ProfileService.getProfileData(token).then(function(response) {
-      $scope.user = response;
+      $scope.user = response.data;
       console.log($scope.user);
     });
   }
-})
+}])

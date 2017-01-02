@@ -1,7 +1,7 @@
 app.service('ProfileService', function($http) {
   this.getProfileData = function(token) {
 
-    $http({
+    return $http({
       method: "POST",
       url: '/profile',
       headers: {
@@ -10,12 +10,12 @@ app.service('ProfileService', function($http) {
       //wysylane do backendu jako obiekt
       data: {token: token}
     })
-    .success(function(response) {
-      console.log("RES: ", response);
-      
-    })
-    .error(function() {
-        console.log("NOT OK");
-    });
+    // .then(function(response) {
+    //   console.log("RES: ", response);
+    //   return response;
+    // })
+    // .catch(function() {
+    //     console.log("NOT OK");
+    // });
   }
 })

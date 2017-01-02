@@ -1,27 +1,4 @@
 main.config(function ($urlRouterProvider, $stateProvider) {
-  // console.log('wchodze');
-  // $stateProvider
-  // .state('home', {
-  //   url: '/',
-  //   abstract: true,
-  //   template: '</ui-view>',
-  //   views: {
-  //     'home': {
-  //       template: "hello"
-  //       // templateUrl: 'app/modules/main/views/main.view.html'
-  //     },
-  //     'filters@home': {
-  //       templateUrl: 'app/modules/main/views/about.html',
-  //       controller: ''
-  //      },
-  //     'tabledata@home': {
-  //       templateUrl: 'app/modules/main/views/homr.html',
-  //       controller: ''
-  //     },
-  //     'graph@home': {},
-  //   }
-  // })
-
 
   $urlRouterProvider.otherwise('/home');
   $stateProvider

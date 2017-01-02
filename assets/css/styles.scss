@@ -13,6 +13,12 @@ body {
   padding: 20px;
 }
 
+#mapIcon {
+  position: relative;
+  top: -7px;
+  left: 0.5px;
+}
+
 #heartButton {
   width: 30px;
   height: auto;
@@ -80,7 +86,7 @@ body {
   }
 }
 .checkboxes {
-  .col-md-2 {
+  .col-md-3 {
     padding-left: 0;
     padding-top: 20px;
     padding-bottom: 20px;
