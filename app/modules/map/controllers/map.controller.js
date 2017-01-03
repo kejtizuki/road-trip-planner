@@ -315,32 +315,15 @@ $scope.options = {
      for (var i = 0; i < bound.length; i++) {
        (function(i) {
          setTimeout(function() {
-           if ($scope.categories[0].selected === true  && $scope.categories[1].selected === false && $scope.categories[2].selected === false) {
-             performSearchBars(bound[i]);
-           }
-           else if ($scope.categories[1].selected === true && $scope.categories[0].selected === false && $scope.categories[2].selected === false) {
-             performSearchMuseums(bound[i]);
-           }
-           else if ($scope.categories[1].selected === false && $scope.categories[0].selected === false && $scope.categories[2].selected === true) {
-             performSearchShops(bound[i]);
-           }
-           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true && $scope.categories[2].selected === false){
-             performSearchBars(bound[i]);
-             performSearchMuseums(bound[i]);
-           }
-           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === false && $scope.categories[2].selected === true) {
-             performSearchBars(bound[i]);
-             performSearchShops(bound[i]);
-           }
-           else if ($scope.categories[0].selected === false && $scope.categories[1].selected === true && $scope.categories[2].selected === true) {
-             performSearchMuseums(bound[i]);
-             performSearchShops(bound[i]);
-           }
-           else if ($scope.categories[0].selected === true && $scope.categories[1].selected === true && $scope.categories[2].selected === true) {
-             performSearchMuseums(bound[i]);
-             performSearchBars(bound[i]);
-             performSearchShops(bound[i]);
-           }
+          if ($scope.categories[0].selected === true) {
+            performSearchBars(bound[i]);
+          }
+          if ($scope.categories[1].selected === true) {
+            performSearchMuseums(bound[i]);
+          }
+          if ($scope.categories[2].selected === true) {
+            performSearchShops(bound[i]);
+          }
          }, 1200 * i);
        }(i));
      }

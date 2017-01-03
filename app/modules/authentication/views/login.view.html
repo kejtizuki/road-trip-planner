@@ -1,9 +1,10 @@
-<div id='main' class="container">
- <form class="form-auth" ng-submit="login()">
-   <h2>Log In</h2>
+<div id='main' class="container centeredDiv">
+<div id="circle">
+ <form class="form-auth form-group" ng-submit="login()">
    <p class="text-warning">{{error_message}}</p>
-   <input type="username" ng-model="user.username" placeholder="Username" class="form-control"><br>
-   <input type="password" ng-model="user.password" placeholder="Password" class="form-control"><br>
-   <input type="submit" value="Log in" class="btn btn-primary" />
+   <input type="username" class="loginInput" ng-model="user.username" placeholder="Username" ><br>
+   <input type="password" class="loginInput" ng-model="user.password" placeholder="Password" ><br>
+   <input type="submit" value="Log in" class="btn btnGet" />
  </form>
+ </div>
 </div>

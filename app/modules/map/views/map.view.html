@@ -8,7 +8,7 @@
             <div class="col-sm-6">
             <label for="origin" class="">Origin</label>
             <!-- <div class="col-sm-4"> -->
-              <input type="text" id="origin" class="form-control" g-places-autocomplete ng-model="directions.origin" />
+              <input type="text" id="origin" class="form-control myInput" g-places-autocomplete ng-model="directions.origin" />
               </div>
             <!-- </div> -->
           <!-- </div> -->
@@ -16,7 +16,7 @@
           <div class="col-sm-6">
             <label for="destination" class="">Destination</label>
             <!-- <div class="col-sm-4"> -->
-              <input type="text" id="destination" class="form-control" g-places-autocomplete ng-model="directions.destination" />
+              <input type="text" id="destination" class="form-control myInput" g-places-autocomplete ng-model="directions.destination" />
             </div>
           </div>
           <div class="checkboxes">
@@ -24,8 +24,7 @@
               <label>
                 <input type="checkbox" name="selectedCategories[]" value="{{category.name}}" id="'{{category}}'" ng-model="category.selected" />
                 <span></span>
-                <!-- {{category.name}} -->
-                <input type="select"></!-->
+                {{category.name}}
               </label>
             </div>
           </div>
