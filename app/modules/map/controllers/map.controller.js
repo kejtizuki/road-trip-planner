@@ -19,6 +19,11 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
     { name: 'shops', selected: false}
   ];
 
+  $scope.directions = {
+    destination: {},
+    origin: {}
+  }
+
   $scope.selection = [];
 
   $scope.selectedCategories = function selectedCategories() {
@@ -225,6 +230,8 @@ $scope.options = {
   uiGmapIsReady.promise().then((function (maps) {
     mapControl = $scope.mapControl.getGMap();
     service = new google.maps.places.PlacesService(mapControl);
+
+
   }));
 
   // var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -264,67 +271,118 @@ $scope.options = {
 
   $scope.getDirections = function () {
 
-    $scope.showHeartButton = true;
-    var request = {
-      origin: $scope.directions.origin.formatted_address,
-      destination: $scope.directions.destination.formatted_address,
-      travelMode: google.maps.DirectionsTravelMode.WALKING
-    };
+    if (angular.equals($scope.directions.origin, {}) && angular.equals($scope.directions.destination, {})) {
+      $scope.errorEmpty = "U have to fill in origin and destination fields";
+    }
+    else if(angular.equals($scope.directions.origin, {}) && !angular.equals($scope.directions.destination, {})) {
+      $scope.errorEmpty = "U have to fill in origin field";
+    }
+    else if(!angular.equals($scope.directions.origin, {}) && angular.equals($scope.directions.destination, {})) {
+      $scope.errorEmpty = "U have to fill in destination field";
+    }
+    else {
+      $scope.errorEmpty = "";
+      $scope.showHeartButton = true;
+      var request = {
+        origin: $scope.directions.origin.formatted_address,
+        destination: $scope.directions.destination.formatted_address,
+        travelMode: google.maps.DirectionsTravelMode.WALKING
+      };
 
-    var reqFormatted = {
-      origin: $scope.directions.origin,
-      destination: $scope.directions.destination
-    };
+      var reqFormatted = {
+        origin: $scope.directions.origin,
+        destination: $scope.directions.destination
+      };
 
-    function makeMarker(position, icon, title) {
-      new Marker({
-        position: position,
-        map: mapControl,
-        icon: icon,
-        map_icon_label: '<span class="map-icon map-icon-circle" id="mapIcon"></span>',
-        title: title
+      function makeMarker(position, icon, title) {
+        new Marker({
+          position: position,
+          map: mapControl,
+          icon: icon,
+          map_icon_label: '<span class="map-icon map-icon-circle" id="mapIcon"></span>',
+          title: title
+        });
+      }
+
+      directionsService.route(request, function (response, status) {
+
+        if (status === google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+
+          makeMarker( response.routes[0].legs[0].start_location, iconStart, "A" );
+          makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'B' );
+
+          var path = response.routes[0].overview_path;
+          bounds = routeboxer.box(path, distance);
+          console.log("B ", bounds);
+          console.log("path ", path);
+
+          mapControl.addListener('bounds_changed', function() {
+            // console.log(mapControl.getBounds().getNorthEast().lat(), mapControl.getBounds().getSouthWest().lat());
+            searchBoundsWithinViewport(bounds, mapControl);
+          });
+
+          directionsDisplay.setMap($scope.mapControl.getGMap());
+          $scope.directions.showList = true;
+        } else {
+          alert('Google route unsuccesfull!');
+        }
       });
     }
 
-    directionsService.route(request, function (response, status) {
-
-      if (status === google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-
-        makeMarker( response.routes[0].legs[0].start_location, iconStart, "A" );
-        makeMarker( response.routes[0].legs[0].end_location, iconEnd, 'B' );
-
-        var path = response.routes[0].overview_path;
-        bounds = routeboxer.box(path, distance);
-
-        console.log("path ", path);
-
-        searchBounds(bounds, $rootScope.myCat);
-
-        directionsDisplay.setMap($scope.mapControl.getGMap());
-        $scope.directions.showList = true;
-      } else {
-        alert('Google route unsuccesfull!');
-      }
-    });
   }
 
   //zmienic distance w zaleznosci od dl trasy
 
-  function searchBounds(bound, category) {
-     for (var i = 0; i < bound.length; i++) {
+
+
+  var boundsTimeoutsBuffer = []
+  var boundsCache = []
+
+  function probabilityFilter (bounds, zoom) {
+    var coeff = 16 - zoom < 1 ? 1 : 16 - zoom
+    var counter = 0
+    return bounds.filter(function () {
+      counter++
+      //reszta z dzielenia przez 2 -> co drugi bound, przez 3 to co trzeci itd
+      return counter % coeff === 0
+    })
+  }
+
+  function boundAlreadyCached (bound) {
+    for(var i = 0; i < boundsCache.length; i++) {
+      if (boundsCache[i].equals(bound)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  function searchBoundsWithinViewport(bounds, viewport) {
+    // filter przyjmuje funkcje ktora przyjmuje pojedynczy element z przeszukiwanej listy
+    var viewportBounds = viewport.getBounds()
+    var zoom = viewport.getZoom()
+    var boundsWithinViewport = bounds.filter(function (bound) {
+      return bound.intersects(viewportBounds) && !boundAlreadyCached(bound)
+    })
+    boundsWithinViewport = probabilityFilter(boundsWithinViewport, zoom)
+    console.log(boundsWithinViewport.length);
+    boundsTimeoutsBuffer.forEach(clearTimeout)
+     for (var i = 0; i < boundsWithinViewport.length; i++) {
        (function(i) {
-         setTimeout(function() {
+        //  rezultaty timeoutow do tablicy
+         boundsTimeoutsBuffer.push(setTimeout(function() {
+           boundsCache.push(boundsWithinViewport[i])
           if ($scope.categories[0].selected === true) {
-            performSearchBars(bound[i]);
+            performSearchBars(boundsWithinViewport[i]);
           }
           if ($scope.categories[1].selected === true) {
-            performSearchMuseums(bound[i]);
+            performSearchMuseums(boundsWithinViewport[i]);
           }
           if ($scope.categories[2].selected === true) {
-            performSearchShops(bound[i]);
+            performSearchShops(boundsWithinViewport[i]);
           }
-         }, 1200 * i);
+        }, 1200 * i));
        }(i));
      }
    }
