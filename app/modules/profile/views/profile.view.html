@@ -2,5 +2,13 @@
 
   <h1>{{user.name}} {{user.surname}}</h1> @{{user.username}}
 
+  <h4>History of the trips <img id="heartButton" src="assets/img/map-of-roads.png" /></h4>
+  <div class="allTrips">
+    <div class="row">
+      <div class="col-md-3">{{user.history.directions.origin.formatted_address}}</div>
+      <div class="col-md-3">{{user.history.directions.destination.formatted_address}}</div>
+      <div class="col-md-3">{{user.history.categories}}</div>
+    </div>
+  </div>
   <p></p>
 </div>

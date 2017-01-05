@@ -133,7 +133,8 @@ function register(req, res, callback) {
     name: req.body.name,
     surname: req.body.surname,
     dateOfBirth: req.body.dateOfBirth,
-    token: token
+    token: token,
+    history: []
   });
 
   res.json({ status: "OK", token: token });
@@ -147,7 +148,7 @@ function addToHistory(req, res, next) {
   console.log("history: ", req.body.history);
 
   var users = req.db.collection('users')
-  users.updateOne({token: req.body.user.token}, {$set: {history: req.body.history}});
+  users.updateOne({token: req.body.user.token}, {$addToSet: {history: req.body.history}});
   res.json({ststus: "OK", user: req.body.user});
   res.end();
 }
