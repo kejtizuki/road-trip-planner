@@ -1,13 +1,24 @@
 <div class="row">
 
-  <h1>{{user.name}} {{user.surname}}</h1> @{{user.username}}
-
-  <h4>History of the trips <img id="heartButton" src="assets/img/map-of-roads.png" /></h4>
-  <div class="allTrips">
+  <div class="" id="user">
+    <h1>{{user.name | uppercase}} {{user.surname | uppercase}}</h1> <p>@{{user.username}}</p>
+  </div>
+  <div class="desc">
     <div class="row">
-      <div class="col-md-3">{{user.history.directions.origin.formatted_address}}</div>
-      <div class="col-md-3">{{user.history.directions.destination.formatted_address}}</div>
-      <div class="col-md-3">{{user.history.categories}}</div>
+      <div class="col-md-4"><h4>FROM</h4></div>
+      <div class="col-md-4"><h4>TO</h4></div>
+      <div class="col-md-4"><h4>CATEGORIES ON ROUTE</h4></div>
+    </div>
+  </div>
+  <div class="allTrips">
+    <div class="row oneTrip" ng-repeat="history in histories">
+      <div class="col-md-4">{{history.directions.origin.formatted_address}}</div>
+      <div class="col-md-4">{{history.directions.destination.formatted_address}}</div>
+      <div class="col-md-4 icons">
+        <img src="assets/img/cutlery.png" ng-show="{{history.categories[0].selected === true}}"/>
+        <img src="assets/img/museum.png" ng-show="{{history.categories[1].selected === true}}"/>
+        <img src="assets/img/shopping-bag.png" ng-show="{{history.categories[2].selected === true}}"/>
+      </div>
     </div>
   </div>
   <p></p>

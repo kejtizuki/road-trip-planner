@@ -11,6 +11,8 @@ function(ProfileService, $scope, $rootScope, $window) {
     ProfileService.getProfileData(token).then(function(response) {
       $scope.user = response.data;
       console.log($scope.user);
+      $scope.histories = $scope.user.history;
+      console.log($scope.histories);
     });
   }
 }])

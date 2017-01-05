@@ -4,6 +4,9 @@
 
 $grey: #544d4d;
 $pink: #FCC7FD;
+$blue: #dbddfc;
+$darkBlue: #3a3aff;
+$lightGrey: #e0e0e0;
 
 body {
   font-family: 'Raleway';
@@ -14,11 +17,52 @@ body {
   padding: 20px;
 }
 
+#user {
+  width: 100%;
+  display: inline-block;
+  color: $darkBlue;
+  h1 {
+    display: inline-block;
+  }
+  p {
+    padding-left: 20px;
+    display: inline-block;
+  }
+  padding-bottom: 50px;
+}
 
 #mapIcon {
   position: relative;
   top: -7px;
   left: 0.5px;
+}
+
+.oneTrip {
+  width: 100%;
+  padding: 20px;
+  display: inline-block;
+  background-color: $lightGrey;
+  color: black;
+  .col-md-4 {
+    // padding-left: 0;
+    // padding-right: 100px;
+    width: 33%;
+    img {
+      width: 30px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+  .icons {
+  }
+}
+
+.desc {
+  font-weight: 900;
+  color: $darkBlue;
+  .col-md-4 {
+    padding: 0px;
+  }
 }
 
 #heartButton {
