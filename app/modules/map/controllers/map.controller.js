@@ -1,4 +1,17 @@
-map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filterFilter) {
+map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filterFilter, MapService, ProfileService) {
+
+  var token = sessionStorage.userToken;
+
+  $scope.addToHistory = function() {
+    // console.log("hist ", $scope.userHistory);
+    // MapService.addToHistory($scope.userHistory);
+
+    ProfileService.getProfileData(token).then(function(res) {
+      var user = res.data;
+      MapService.addToHistory(user, $scope.userHistory, token);
+    });
+  }
+
   $scope.enableMap = true;
 
   $scope.map = {
@@ -22,6 +35,11 @@ map.controller('MapController', function($scope, uiGmapIsReady, $rootScope, filt
   $scope.directions = {
     destination: {},
     origin: {}
+  }
+
+  $scope.userHistory = {
+    directions: $scope.directions,
+    categories: $scope.categories
   }
 
   $scope.selection = [];
@@ -281,12 +299,13 @@ $scope.options = {
       $scope.errorEmpty = "U have to fill in destination field";
     }
     else {
+      console.log($scope.directions);
       $scope.errorEmpty = "";
       $scope.showHeartButton = true;
       var request = {
         origin: $scope.directions.origin.formatted_address,
         destination: $scope.directions.destination.formatted_address,
-        travelMode: google.maps.DirectionsTravelMode.WALKING
+        travelMode: google.maps.DirectionsTravelMode.DRIVING
       };
 
       var reqFormatted = {
@@ -322,6 +341,8 @@ $scope.options = {
             searchBoundsWithinViewport(bounds, mapControl);
           });
 
+          // searchBounds(bounds);
+
           directionsDisplay.setMap($scope.mapControl.getGMap());
           $scope.directions.showList = true;
         } else {
@@ -339,6 +360,7 @@ $scope.options = {
   var boundsTimeoutsBuffer = []
   var boundsCache = []
 
+ //  //funkcja sprawdzajaca co ktory bound ma byc przeszukany w zaleznosci od zoomu.
   function probabilityFilter (bounds, zoom) {
     var coeff = 16 - zoom < 1 ? 1 : 16 - zoom
     var counter = 0
@@ -349,6 +371,8 @@ $scope.options = {
     })
   }
 
+ // // sprawdzanie czy dany bound zostal juz przeszukany. Został przeszukany tzn ze został dodany do tablicy
+ // // boundsCache
   function boundAlreadyCached (bound) {
     for(var i = 0; i < boundsCache.length; i++) {
       if (boundsCache[i].equals(bound)) {
@@ -359,14 +383,21 @@ $scope.options = {
   }
 
   function searchBoundsWithinViewport(bounds, viewport) {
-    // filter przyjmuje funkcje ktora przyjmuje pojedynczy element z przeszukiwanej listy
+
     var viewportBounds = viewport.getBounds()
     var zoom = viewport.getZoom()
+    console.log("zoom ", zoom);
+    // filter przyjmuje funkcje ktora przyjmuje pojedynczy element z przeszukiwanej listy
     var boundsWithinViewport = bounds.filter(function (bound) {
       return bound.intersects(viewportBounds) && !boundAlreadyCached(bound)
     })
     boundsWithinViewport = probabilityFilter(boundsWithinViewport, zoom)
+    //sprawdzac czy w danym zoomie przeszukal wszystkie boundsy, length===0 to wszystkie zosaly przeszukane
+    //w viewporcie w ktorym jestem
     console.log(boundsWithinViewport.length);
+    if (boundsWithinViewport.length === 0 ) {
+      $scope.mapError = "Zoom in or move the map within the route";
+    }
     boundsTimeoutsBuffer.forEach(clearTimeout)
      for (var i = 0; i < boundsWithinViewport.length; i++) {
        (function(i) {
@@ -386,6 +417,25 @@ $scope.options = {
        }(i));
      }
    }
+
+  // function searchBounds(bound) {
+  //    for (var i = 0; i < bound.length; i++) {
+  //      (function(i) {
+  //        setTimeout(function() {
+  //         if ($scope.categories[0].selected === true) {
+  //           performSearchBars(bound[i]);
+  //         }
+  //         if ($scope.categories[1].selected === true) {
+  //           performSearchMuseums(bound[i]);
+  //         }
+  //         if ($scope.categories[2].selected === true) {
+  //           performSearchShops(bound[i]);
+  //         }
+  //        }, 1200 * i);
+  //      }(i));
+  //    }
+  //  }
+
 
   var infowindow = new google.maps.InfoWindow();
 
@@ -443,7 +493,7 @@ function callbackShops (results, status) {
   }
   //  results.forEach(addMarkerMuseums);
   for (var i = 0; i < results.length; i++) {
-    addMarkers(results[i], "red");
+    addMarkers(results[i], "#f47e69");
   }
 }
 

@@ -104,12 +104,10 @@ function getProfile(req, res) {
         // res.json(user);
         // res.end();
         resolve(user);
-        console.log("user: ", user);
         // res.json(user);
       }
     })
     .then(function (user) {
-      console.log("fn USER", user);
       //res.json(user);
       var test = JSON.stringify(user)
       res.send(test);
@@ -145,6 +143,15 @@ function register(req, res, callback) {
   // })
 }
 
+function addToHistory(req, res, next) {
+  console.log("history: ", req.body.history);
+
+  var users = req.db.collection('users')
+  users.updateOne({token: req.body.user.token}, {$set: {history: req.body.history}});
+  res.json({ststus: "OK", user: req.body.user});
+  res.end();
+}
+
 //wywoluje listen w tej funkcji dlatego ze aplikacja uruchomi sie tylko gdy jest polaczenie z baza
 connect(function (db) {
   app.use(bodyParser.json())
@@ -152,7 +159,8 @@ connect(function (db) {
   app.use(morgan('dev'))
   app.use('/login', tokenMiddleware);
   app.use('/register', register);
-  app.use('/profile', getProfile)
+  app.use('/profile', getProfile);
+  app.use('/history', addToHistory)
   app.post('/login', login);
   //app.post('/profile', getProfile);
   app.use(express.static('.'));
